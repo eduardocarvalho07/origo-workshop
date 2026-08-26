@@ -724,7 +724,7 @@
 
     <script>
         const DIMENSIONS = ['Eficiência', 'Clientes', 'Expansão/Novos Negócios'];
-        const PHASES = ['voting', 'refine', 'map', 'ambition'];
+        const PHASES = ['voting', 'refine', 'map', 'ambition', 'final'];
         
         // URLs dos CSVs publicados
         const CSV_URLS = {
@@ -958,9 +958,13 @@
             }
         }
 
-        function clearAllData() {
+        async function clearAllData() {
             if (confirm('⚠️ Tem CERTEZA que deseja limpar TODOS os dados do workshop?\n\nEsta ação NÃO pode ser desfeita!')) {
                 if (confirm('Último aviso: Todos os dados serão perdidos. Deseja continuar?')) {
+                    // Limpar dados do Sheets
+                    await postToSheets('clearAllData', {});
+                    
+                    // Limpar estado local
                     state = {
                         directors: [],
                         objectives: {
@@ -985,7 +989,7 @@
 
         function renderPhaseNav() {
             const nav = document.getElementById('phaseNav');
-            const phaseNames = ['Votação', 'Refinamentos', 'Mapa', 'Ambição'];
+            const phaseNames = ['Votação', 'Refinamentos', 'Mapa', 'Ambição', 'Consolidação'];
             nav.innerHTML = PHASES.map((p, i) => 
                 `<button class="phase-btn ${i === currentPhase ? 'active' : ''}" onclick="goToPhase(${i})">
                     Fase ${i + 1}: ${phaseNames[i]}
@@ -1000,7 +1004,7 @@
 
         function updatePhaseBadge() {
             const badge = document.getElementById('phaseBadge');
-            const phaseNames = ['Votação de Objetivos', 'Ajuste/Refinamentos', 'Mapa Final', 'Ambição Final'];
+            const phaseNames = ['Votação de Objetivos', 'Ajuste/Refinamentos', 'Mapa Final', 'Ambição Final', 'Consolidação Final'];
             badge.textContent = 'Fase ' + (currentPhase + 1) + ': ' + phaseNames[currentPhase];
         }
 
@@ -1015,8 +1019,10 @@
                 content.innerHTML = renderRefine();
             } else if (currentPhase === 2) {
                 content.innerHTML = renderMap();
-            } else {
+            } else if (currentPhase === 3) {
                 content.innerHTML = renderAmbition();
+            } else if (currentPhase === 4) {
+                content.innerHTML = renderFinal();
             }
         }
 
@@ -1073,7 +1079,7 @@
                             </div>
                             <div style="display: flex; gap: 8px; align-items: center;">
                                 <span class="votes-badge">${votes} votos</span>
-                                <button class="button secondary" style="padding: 4px 8px; font-size: 11px;" onclick="voteObjective('${dim}',${idx})">
+                                <button class="button secondary" style="padding: 4px 8px; font-size: 11px;" data-dimension="${dim}" data-index="${idx}" onclick="handleVoteObjective(event)">
                                     Votar
                                 </button>
                             </div>
@@ -1117,6 +1123,18 @@
                 showSuccess('Objetivo adicionado!');
                 renderAll();
             }
+        }
+
+        // Wrapper para voto via data attributes (evita problema de escopo)
+        function handleVoteObjective(e) {
+            const dimension = e.currentTarget.getAttribute('data-dimension');
+            const index = parseInt(e.currentTarget.getAttribute('data-index'));
+            voteObjective(dimension, index);
+        }
+
+        function handleVoteAmbition(e) {
+            const index = parseInt(e.currentTarget.getAttribute('data-index'));
+            voteAmbition(index);
         }
 
         async function voteObjective(dimension, index) {
@@ -1361,11 +1379,10 @@
                 state.ambitions.forEach((amb, idx) => {
                     const votes = amb.votes || 0;
                     html += `<div class="ambition-card">
-                        <h3>${amb.director}</h3>
                         <p class="ambition-text">${amb.text}</p>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px;">
                             <span class="votes-badge">${votes} votos</span>
-                            <button class="button secondary" style="padding: 6px 12px; font-size: 12px;" onclick="voteAmbition(${idx})">
+                            <button class="button secondary" style="padding: 6px 12px; font-size: 12px;" data-index="${idx}" onclick="handleVoteAmbition(event)">
                                 Votar
                             </button>
                         </div>
@@ -1469,6 +1486,68 @@
             </div>`;
 
             document.getElementById('content').innerHTML = html;
+        }
+
+        function renderFinal() {
+            const topAmbition = state.ambitions.reduce((a, b) => (b.votes || 0) > (a.votes || 0) ? b : a, state.ambitions[0] || {});
+            
+            let objectivesHTML = '';
+            DIMENSIONS.forEach(dim => {
+                const selected = state.selectedObjectives[dim];
+                const topIdx = getTopVotedIndex(dim);
+                const topObj = topIdx !== -1 ? state.objectives[dim][topIdx] : null;
+                const objective = selected || topObj;
+                
+                objectivesHTML += `<div class="map-card winner">
+                    <h3>${dim}</h3>
+                    <div class="map-value">${objective || 'N/A'}</div>
+                </div>`;
+            });
+
+            let html = `<div class="section" style="margin-top: 20px;">
+                <h2>Fase 5: Consolidação Final</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 24px;">
+                    Resultado final do workshop: Ambição eleita + Objetivos Estratégicos
+                </p>
+
+                <div class="final-map">
+                    <h2 style="margin-top: 0; color: var(--falconi-olive);">🎯 Ambição Final</h2>
+                    <div class="ambition-section" style="margin: 20px 0; background: white; padding: 20px; border-radius: 8px; border-left: 5px solid var(--falconi-lime);">
+                        <p class="ambition-text" style="font-size: 16px; font-weight: 500; margin: 0;">${topAmbition.text || 'Nenhuma ambição registrada'}</p>
+                        <p style="margin-top: 12px; color: var(--text-secondary); font-size: 12px;">
+                            ${topAmbition.votes || 0} votos de apoio
+                        </p>
+                    </div>
+
+                    <h2 style="margin: 32px 0 16px 0; color: var(--falconi-olive);">📊 Objetivos Estratégicos Eleitos</h2>
+                    <div class="objectives-grid">
+                        ${objectivesHTML}
+                    </div>
+
+                    <div style="margin-top: 32px; padding-top: 24px; border-top: 2px solid var(--border-light);">
+                        <p style="color: var(--text-secondary); font-size: 12px; margin: 8px 0;">
+                            <strong>Workshop realizado:</strong> ${state.createdAt}
+                        </p>
+                        <p style="color: var(--text-secondary); font-size: 12px; margin: 8px 0;">
+                            <strong>Total de Participantes:</strong> ${state.directors.length}
+                        </p>
+                        <p style="color: var(--text-secondary); font-size: 12px; margin: 8px 0;">
+                            <strong>Ambições sugeridas:</strong> ${state.ambitions.length}
+                        </p>
+                        <p style="color: var(--text-secondary); font-size: 12px; margin: 8px 0;">
+                            <strong>Objetivos consolidados:</strong> ${Object.values(state.objectives).reduce((a, b) => a + (b.length > 0 ? 1 : 0), 0)} de 3 dimensões
+                        </p>
+                    </div>
+                </div>
+
+                <div class="export-buttons" style="margin-top: 24px; display: flex; gap: 8px;">
+                    <button class="button" onclick="downloadJSON()" style="flex: 1;">⬇️ Baixar JSON</button>
+                    <button class="button secondary" onclick="downloadCSV()" style="flex: 1;">⬇️ Baixar CSV</button>
+                    <button class="button secondary" onclick="window.print()" style="flex: 1;">🖨️ Imprimir</button>
+                </div>
+            </div>`;
+
+            return html;
         }
 
         function exportResults() {
