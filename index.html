@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Órigo Energia - Workshop de Objetivos Estratégicos</title>
+    <style>
+        :root {
+            --falconi-olive: #7A7423;
+            --falconi-lime: #A7E82B;
+            --falconi-off-white: #EAEBE9;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666;
+            --border-light: #ddd;
+            --success: #27ae60;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            background: #f9f7f4;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 500;
+            margin: 0 0 8px;
+            color: var(--falconi-olive);
+        }
+
+        h2 {
+            font-size: 18px;
+            font-weight: 500;
+            margin: 16px 0 12px;
+            color: var(--falconi-olive);
+        }
+
+        h3 {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--falconi-olive);
+            margin: 12px 0 8px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--falconi-olive) 0%, #6a6319 100%);
+            color: white;
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: white;
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .header-subtitle {
+            color: rgba(255,255,255,0.9);
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .phase-badge {
+            background: var(--falconi-lime);
+            color: var(--falconi-olive);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .section {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .button {
+            padding: 12px 24px;
+            background: var(--falconi-olive);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            background: #6a6319;
+            transform: translateY(-1px);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .button.secondary {
+            background: white;
+            color: var(--falconi-olive);
+            border: 1px solid var(--falconi-olive);
+        }
+
+        .button.secondary:hover {
+            background: var(--falconi-off-white);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: var(--falconi-off-white);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .feature-card h3 {
+            margin-top: 0;
+            color: var(--falconi-olive);
+        }
+
+        .feature-icon {
+            font-size: 36px;
+            margin-bottom: 12px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: var(--falconi-off-white);
+            padding: 16px;
+            border-radius: 4px;
+            border-left: 3px solid var(--falconi-lime);
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--falconi-olive);
+            margin-top: 8px;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, var(--falconi-olive) 0%, #6a6319 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .cta-section h2 {
+            color: white;
+            margin-top: 0;
+        }
+
+        .cta-section p {
+            font-size: 16px;
+            margin: 16px 0;
+            opacity: 0.9;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+
+        .info-box {
+            background: #e8f5e9;
+            border-left: 4px solid var(--falconi-lime);
+            padding: 16px;
+            border-radius: 4px;
+            margin: 16px 0;
+        }
+
+        .info-box strong {
+            color: var(--falconi-olive);
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .button {
+                width: 100%;
+            }
+
+            .cta-section {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>Órigo Energia</h1>
+                <div class="header-subtitle">Workshop de Objetivos Estratégicos</div>
+            </div>
+            <div class="phase-badge">Bem-vindo</div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Bem-vindo ao Workshop</h2>
+            <p style="font-size: 16px; color: var(--text-secondary); margin: 16px 0;">
+                Plataforma completa para gerenciar objetivos estratégicos com votação, refinamento assistido por IA e painel de administrador.
+            </p>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-label">Fases</div>
+                    <div class="stat-value">4</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Dimensões</div>
+                    <div class="stat-value">3</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Recursos</div>
+                    <div class="stat-value">5+</div>
+                </div>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🗳️</div>
+                    <h3>Votação</h3>
+                    <p>Diretores votam e elegem os melhores objetivos estratégicos.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">✨</div>
+                    <h3>Refinamentos</h3>
+                    <p>IA gera 5 opções refinadas baseadas em seus pedidos.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Mapa Final</h3>
+                    <p>Visualização profissional dos 3 objetivos eleitos.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💡</div>
+                    <h3>Ambição Final</h3>
+                    <p>Capture a visão maior da organização em uma frase.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚙️</div>
+                    <h3>Admin Panel</h3>
+                    <p>Controle total: delete erros, visualize estatísticas.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💾</div>
+                    <h3>Exportação</h3>
+                    <p>Baixe dados em JSON ou CSV para análise.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2>Pronto para começar?</h2>
+            <p>Acesse a plataforma completa do workshop abaixo.</p>
+            <div class="button-group">
+                <a href="origo_workshop.html" class="button">🚀 Acessar Workshop</a>
+                <a href="#info" class="button secondary">📖 Mais Informações</a>
+            </div>
+        </div>
+
+        <div id="info" class="section">
+            <h2>📋 Como Usar</h2>
+            
+            <h3>Fase 1: Votação de Objetivos</h3>
+            <p>Cadastre os diretores e deixe que cada um sugira objetivos para as três dimensões:</p>
+            <ul style="margin-left: 20px; margin-top: 8px;">
+                <li>Eficiência</li>
+                <li>Clientes</li>
+                <li>Expansão/Novos Negócios</li>
+            </ul>
+            <p style="margin-top: 12px;">Todos votam nas melhores opções.</p>
+
+            <h3>Fase 2: Ajuste e Refinamentos</h3>
+            <p>Para os objetivos mais votados, você pode:</p>
+            <ul style="margin-left: 20px; margin-top: 8px;">
+                <li>Solicitar refinamentos específicos</li>
+                <li>IA gera 5 opções melhoradas</li>
+                <li>Selecione a melhor opção refinada</li>
+            </ul>
+
+            <h3>Fase 3: Mapa de Objetivos Estratégicos</h3>
+            <p>Visualize os 3 objetivos eleitos de forma profissional, prontos para apresentação executiva.</p>
+
+            <h3>Fase 4: Ambição Final</h3>
+            <p>Cada diretor escreve sua ambição para a Órigo e todos votam na melhor. Incorpora ao mapa final.</p>
+
+            <div class="info-box">
+                <strong>🔐 Acesso de Administrador</strong><br/>
+                Clique no botão ⚙️ (canto inferior direito) e use a senha: <code style="background: white; padding: 2px 6px; border-radius: 3px;">Falconi2024</code>
+            </div>
+
+            <h2>💾 Seus Dados</h2>
+            <p>Todos os dados são salvos automaticamente no navegador. Você pode:</p>
+            <ul style="margin-left: 20px; margin-top: 8px;">
+                <li>Exportar em JSON para backup completo</li>
+                <li>Exportar em CSV para análise em Excel</li>
+                <li>Imprimir o resumo final</li>
+            </ul>
+
+            <h2>📱 Compatibilidade</h2>
+            <p>Funciona em:</p>
+            <ul style="margin-left: 20px; margin-top: 8px;">
+                <li>✅ Desktop (Chrome, Firefox, Safari, Edge)</li>
+                <li>✅ Tablet (iPad, Android)</li>
+                <li>✅ Mobile (iPhone, Android)</li>
+                <li>✅ Offline (sem internet)</li>
+            </ul>
+
+            <div style="margin-top: 24px; padding: 16px; background: var(--falconi-off-white); border-radius: 4px; border-left: 3px solid var(--falconi-olive);">
+                <p style="margin: 0;"><strong>Dúvidas?</strong> Consulte o README.md ou SETUP_VERCEL.md para documentação completa.</p>
+            </div>
+        </div>
+
+        <div class="section" style="text-align: center; background: var(--falconi-off-white); border-color: var(--falconi-lime);">
+            <h3 style="margin-top: 0;">Pronto para o Workshop?</h3>
+            <a href="origo_workshop.html" class="button" style="font-size: 16px; padding: 14px 32px;">Acessar Plataforma Completa →</a>
+        </div>
+    </div>
+</body>
+</html>
