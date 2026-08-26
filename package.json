@@ -1,0 +1,19 @@
+{
+  "name": "origo-workshop",
+  "version": "1.0.0",
+  "description": "Workshop de Objetivos Estratégicos - Órigo Energia",
+  "main": "origo_workshop.html",
+  "scripts": {
+    "dev": "echo 'Abra origo_workshop.html no navegador'",
+    "build": "echo 'Build não necessário - HTML puro'"
+  },
+  "keywords": [
+    "workshop",
+    "objetivos",
+    "estratégicos",
+    "falconi",
+    "órigo"
+  ],
+  "author": "Falconi Consultoria",
+  "license": "MIT"
+}

@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Órigo Energia - Workshop de Objetivos Estratégicos</title>
+    <style>
+        :root {
+            --falconi-olive: #7A7423;
+            --falconi-lime: #A7E82B;
+            --falconi-off-white: #EAEBE9;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666;
+            --border-light: #ddd;
+            --success: #27ae60;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            background: #f9f7f4;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 500;
+            margin: 0 0 8px;
+            color: var(--falconi-olive);
+        }
+
+        h2 {
+            font-size: 18px;
+            font-weight: 500;
+            margin: 16px 0 12px;
+            color: var(--falconi-olive);
+        }
+
+        h3 {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--falconi-olive);
+            margin: 12px 0 8px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--falconi-olive) 0%, #6a6319 100%);
+            color: white;
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: white;
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .header-subtitle {
+            color: rgba(255,255,255,0.9);
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .phase-badge {
+            background: var(--falconi-lime);
+            color: var(--falconi-olive);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .phase-nav {
+            display: flex;
+            gap: 8px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .phase-btn {
+            padding: 10px 16px;
+            border: 2px solid var(--border-light);
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            color: var(--text-secondary);
+        }
+
+        .phase-btn.active {
+            background: var(--falconi-olive);
+            color: white;
+            border-color: var(--falconi-olive);
+        }
+
+        .phase-btn:hover:not(.active) {
+            border-color: var(--falconi-olive);
+            background: #fafaf8;
+        }
+
+        .section {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .dimension-card {
+            background: var(--falconi-off-white);
+            border-left: 4px solid var(--falconi-olive);
+            padding: 16px;
+            margin: 12px 0;
+            border-radius: 4px;
+        }
+
+        .input-group {
+            margin: 16px 0;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .input-group input,
+        .input-group textarea,
+        .input-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: var(--falconi-olive);
+            box-shadow: 0 0 0 2px rgba(122, 116, 35, 0.1);
+        }
+
+        .button {
+            padding: 10px 16px;
+            background: var(--falconi-olive);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .button:hover {
+            background: #6a6319;
+            transform: translateY(-1px);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .button.secondary {
+            background: white;
+            color: var(--falconi-olive);
+            border: 1px solid var(--falconi-olive);
+        }
+
+        .button.secondary:hover {
+            background: var(--falconi-off-white);
+        }
+
+        .button.danger {
+            background: #c83c3c;
+        }
+
+        .button.danger:hover {
+            background: #a83030;
+        }
+
+        .button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .objective-item {
+            background: var(--falconi-off-white);
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 3px solid var(--falconi-olive);
+        }
+
+        .objective-item.winning {
+            border-left: 3px solid var(--falconi-lime);
+            background: #f5fde8;
+        }
+
+        .votes-badge {
+            background: var(--falconi-lime);
+            color: var(--falconi-olive);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 500;
+            font-size: 12px;
+            display: inline-block;
+        }
+
+        .map-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .map-card {
+            background: white;
+            border: 2px solid var(--falconi-olive);
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .map-card:hover {
+            box-shadow: 0 4px 12px rgba(122, 116, 35, 0.15);
+        }
+
+        .map-card.winner {
+            border: 3px solid var(--falconi-lime);
+            background: #f5fde8;
+        }
+
+        .map-card h3 {
+            margin-top: 0;
+        }
+
+        .map-value {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--falconi-olive);
+            margin-top: 12px;
+            line-height: 1.5;
+            min-height: 60px;
+        }
+
+        .refinement-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .refinement-option {
+            background: var(--falconi-off-white);
+            border: 1px solid var(--border-light);
+            padding: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 13px;
+        }
+
+        .refinement-option:hover {
+            border-color: var(--falconi-olive);
+            background: #fff;
+        }
+
+        .refinement-option.selected {
+            border: 2px solid var(--falconi-lime);
+            background: #f5fde8;
+        }
+
+        .ambition-card {
+            background: white;
+            border: 2px solid var(--falconi-lime);
+            border-radius: 6px;
+            padding: 16px;
+            margin: 12px 0;
+        }
+
+        .ambition-card h3 {
+            color: var(--falconi-lime);
+            margin-top: 0;
+        }
+
+        .ambition-text {
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--text-primary);
+            margin: 8px 0;
+        }
+
+        .final-map {
+            background: white;
+            border: 2px solid var(--falconi-olive);
+            border-radius: 6px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+
+        .final-map h2 {
+            margin-top: 0;
+            text-align: center;
+        }
+
+        .ambition-section {
+            background: var(--falconi-off-white);
+            border-left: 4px solid var(--falconi-lime);
+            padding: 16px;
+            margin-bottom: 16px;
+            border-radius: 4px;
+        }
+
+        .ambition-section h3 {
+            color: var(--falconi-olive);
+            margin-top: 0;
+            font-size: 16px;
+        }
+
+        .objectives-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .empty-state {
+            padding: 20px;
+            background: var(--falconi-off-white);
+            border-radius: 4px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .action-bar {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .objectives-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .phase-nav {
+                flex-direction: column;
+            }
+
+            .phase-btn {
+                width: 100%;
+            }
+
+            .objective-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .button-group {
+                width: 100%;
+            }
+
+            .button {
+                flex: 1;
+                min-width: 120px;
+            }
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .stat-card {
+            background: var(--falconi-off-white);
+            padding: 12px;
+            border-radius: 4px;
+            border-left: 3px solid var(--falconi-lime);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--falconi-olive);
+            margin-top: 4px;
+        }
+
+        .admin-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--falconi-olive);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: all 0.2s;
+            z-index: 999;
+        }
+
+        .admin-toggle:hover {
+            background: #6a6319;
+            transform: scale(1.1);
+        }
+
+        .admin-panel {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+            z-index: 1000;
+            overflow-y: auto;
+            display: none;
+            flex-direction: column;
+        }
+
+        .admin-panel.open {
+            display: flex;
+        }
+
+        .admin-header {
+            background: var(--falconi-olive);
+            color: white;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-header h2 {
+            color: white;
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .admin-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .admin-content {
+            padding: 16px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .admin-section {
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .admin-section:last-child {
+            border-bottom: none;
+        }
+
+        .admin-section h3 {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--falconi-olive);
+            text-transform: uppercase;
+            margin: 0 0 10px;
+        }
+
+        .admin-item {
+            background: var(--falconi-off-white);
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            font-size: 12px;
+            gap: 8px;
+        }
+
+        .admin-item-text {
+            flex: 1;
+            word-break: break-word;
+        }
+
+        .admin-delete-btn {
+            background: #c83c3c;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 500;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .admin-delete-btn:hover {
+            background: #a83030;
+        }
+
+        .login-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .login-overlay.show {
+            display: flex;
+        }
+
+        .login-box {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .login-box h2 {
+            margin-top: 0;
+            color: var(--falconi-olive);
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 10px;
+            margin: 12px 0;
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .login-box button {
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        .admin-stats {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .admin-stat {
+            background: var(--falconi-off-white);
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .admin-stat-label {
+            color: var(--text-secondary);
+        }
+
+        .admin-stat-value {
+            font-weight: 600;
+            color: var(--falconi-olive);
+            margin-top: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .admin-panel {
+                width: 100%;
+            }
+
+            .admin-toggle {
+                bottom: 10px;
+                right: 10px;
+            }
+
+            .admin-item {
+                flex-direction: column;
+            }
+
+            .admin-delete-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>Órigo Energia</h1>
+                <div class="header-subtitle">Workshop de Objetivos Estratégicos</div>
+            </div>
+            <div class="phase-badge" id="phaseBadge">Fase 1</div>
+        </div>
+
+        <div class="phase-nav" id="phaseNav"></div>
+        <div id="successMessage" class="success-message"></div>
+        <div id="content"></div>
+    </div>
+
+    <button class="admin-toggle" id="adminToggle" title="Painel de Administrador">⚙️</button>
+
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-header">
+            <h2>Painel de Administrador</h2>
+            <button class="admin-close" onclick="toggleAdminPanel()">✕</button>
+        </div>
+        <div class="admin-content" id="adminContent">
+            <div class="admin-stats">
+                <div class="admin-stat">
+                    <div class="admin-stat-label">Total de Objetivos</div>
+                    <div class="admin-stat-value" id="adminTotalObjectives">0</div>
+                </div>
+                <div class="admin-stat">
+                    <div class="admin-stat-label">Total de Ambições</div>
+                    <div class="admin-stat-value" id="adminTotalAmbitions">0</div>
+                </div>
+            </div>
+            <div id="adminObjectivesSection"></div>
+            <button class="button danger" onclick="clearAllData()" style="width: 100%; margin-top: 16px;">
+                🗑️ Limpar Todos os Dados
+            </button>
+        </div>
+    </div>
+
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-box">
+            <h2>Acesso de Administrador</h2>
+            <input type="password" id="adminPassword" placeholder="Digite a senha" onkeypress="if(event.key==='Enter') loginAdmin()"/>
+            <button class="button" onclick="loginAdmin()">Entrar</button>
+            <button class="button secondary" onclick="document.getElementById('loginOverlay').classList.remove('show')" style="margin-top: 8px;">Cancelar</button>
+        </div>
+    </div>
+
+    <script>
+        const DIMENSIONS = ['Eficiência', 'Clientes', 'Expansão/Novos Negócios'];
+        const PHASES = ['voting', 'refine', 'map', 'ambition'];
+
+        let currentPhase = 0;
+        let state = {
+            directors: [],
+            objectives: {
+                'Eficiência': [],
+                'Clientes': [],
+                'Expansão/Novos Negócios': []
+            },
+            votes: {},
+            selectedObjectives: {},
+            refinements: {},
+            refinementOptions: {},
+            ambitions: [],
+            createdAt: new Date().toLocaleString('pt-BR')
+        };
+
+        // LocalStorage Functions
+        function loadState() {
+            try {
+                const saved = localStorage.getItem('origo-workshop-state');
+                if (saved) {
+                    state = JSON.parse(saved);
+                }
+            } catch (e) {
+                console.log('No saved state');
+            }
+        }
+
+        function saveState() {
+            try {
+                localStorage.setItem('origo-workshop-state', JSON.stringify(state));
+            } catch (e) {
+                console.log('Save failed');
+            }
+        }
+
+        function showSuccess(message) {
+            const el = document.getElementById('successMessage');
+            el.textContent = message;
+            el.classList.add('show');
+            setTimeout(() => el.classList.remove('show'), 3000);
+        }
+
+        // Admin Functions
+        const ADMIN_PASSWORD = 'Falconi2024'; // Senha padrão - pode ser alterada
+
+        let adminLoggedIn = false;
+
+        function loginAdmin() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === ADMIN_PASSWORD) {
+                adminLoggedIn = true;
+                document.getElementById('loginOverlay').classList.remove('show');
+                document.getElementById('adminPassword').value = '';
+                toggleAdminPanel();
+                updateAdminPanel();
+                showSuccess('Acesso de admin concedido!');
+            } else {
+                alert('Senha incorreta');
+                document.getElementById('adminPassword').value = '';
+            }
+        }
+
+        function toggleAdminPanel() {
+            if (!adminLoggedIn) {
+                document.getElementById('loginOverlay').classList.add('show');
+                return;
+            }
+            const panel = document.getElementById('adminPanel');
+            panel.classList.toggle('open');
+            if (panel.classList.contains('open')) {
+                updateAdminPanel();
+            }
+        }
+
+        function updateAdminPanel() {
+            // Estatísticas
+            const totalObjectives = Object.values(state.objectives).reduce((a, b) => a + b.length, 0);
+            const totalAmbitions = state.ambitions.length;
+
+            document.getElementById('adminTotalObjectives').textContent = totalObjectives;
+            document.getElementById('adminTotalAmbitions').textContent = totalAmbitions;
+
+            // Seção de objetivos
+            let html = '';
+            
+            DIMENSIONS.forEach(dim => {
+                if (state.objectives[dim] && state.objectives[dim].length > 0) {
+                    html += `<div class="admin-section">
+                        <h3>${dim}</h3>`;
+                    
+                    state.objectives[dim].forEach((obj, idx) => {
+                        const votes = state.votes[`${dim}-${idx}`] || 0;
+                        const shortObj = obj.length > 50 ? obj.substring(0, 50) + '...' : obj;
+                        html += `<div class="admin-item">
+                            <div class="admin-item-text">${shortObj} <span style="color: var(--text-secondary);">(${votes} votos)</span></div>
+                            <button class="admin-delete-btn" onclick="deleteObjective('${dim}', ${idx})">Deletar</button>
+                        </div>`;
+                    });
+                    
+                    html += `</div>`;
+                }
+            });
+
+            // Seção de ambições
+            if (state.ambitions && state.ambitions.length > 0) {
+                html += `<div class="admin-section">
+                    <h3>Ambições</h3>`;
+                
+                state.ambitions.forEach((amb, idx) => {
+                    const shortText = amb.text.length > 50 ? amb.text.substring(0, 50) + '...' : amb.text;
+                    html += `<div class="admin-item">
+                        <div class="admin-item-text"><strong>${amb.director}</strong><br/>${shortText} <span style="color: var(--text-secondary);">(${amb.votes || 0} votos)</span></div>
+                        <button class="admin-delete-btn" onclick="deleteAmbition(${idx})">Deletar</button>
+                    </div>`;
+                });
+                
+                html += `</div>`;
+            }
+
+            document.getElementById('adminObjectivesSection').innerHTML = html || '<p style="color: var(--text-secondary); font-size: 12px;">Nenhum dado para exibir</p>';
+        }
+
+        function deleteObjective(dimension, index) {
+            if (confirm(`Tem certeza que deseja deletar este objetivo de ${dimension}?`)) {
+                // Remove o objetivo
+                state.objectives[dimension].splice(index, 1);
+                
+                // Remove os votos associados
+                const keysToDelete = [];
+                for (const key in state.votes) {
+                    if (key.startsWith(dimension + '-')) {
+                        keysToDelete.push(key);
+                    }
+                }
+                keysToDelete.forEach(key => delete state.votes[key]);
+                
+                // Re-indexa os votos
+                const newVotes = {};
+                state.objectives[dimension].forEach((obj, newIdx) => {
+                    const oldKey = `${dimension}-${index > newIdx ? newIdx : newIdx + 1}`;
+                    const newKey = `${dimension}-${newIdx}`;
+                    if (state.votes[oldKey]) {
+                        newVotes[newKey] = state.votes[oldKey];
+                    }
+                });
+                
+                // Limpa e reaplica votos
+                state.votes = Object.keys(state.votes)
+                    .filter(k => !k.startsWith(dimension))
+                    .reduce((obj, key) => {
+                        obj[key] = state.votes[key];
+                        return obj;
+                    }, {});
+                
+                Object.assign(state.votes, newVotes);
+                
+                saveState();
+                showSuccess('Objetivo deletado!');
+                updateAdminPanel();
+                renderAll();
+            }
+        }
+
+        function deleteAmbition(index) {
+            if (confirm(`Tem certeza que deseja deletar a ambição de ${state.ambitions[index].director}?`)) {
+                state.ambitions.splice(index, 1);
+                saveState();
+                showSuccess('Ambição deletada!');
+                updateAdminPanel();
+                renderAll();
+            }
+        }
+
+        function clearAllData() {
+            if (confirm('⚠️ Tem CERTEZA que deseja limpar TODOS os dados do workshop?\n\nEsta ação NÃO pode ser desfeita!')) {
+                if (confirm('Último aviso: Todos os dados serão perdidos. Deseja continuar?')) {
+                    state = {
+                        directors: [],
+                        objectives: {
+                            'Eficiência': [],
+                            'Clientes': [],
+                            'Expansão/Novos Negócios': []
+                        },
+                        votes: {},
+                        selectedObjectives: {},
+                        refinements: {},
+                        refinementOptions: {},
+                        ambitions: [],
+                        createdAt: new Date().toLocaleString('pt-BR')
+                    };
+                    saveState();
+                    showSuccess('Todos os dados foram apagados!');
+                    currentPhase = 0;
+                    updateAdminPanel();
+                    renderAll();
+                }
+            }
+        }
+
+        function renderPhaseNav() {
+            const nav = document.getElementById('phaseNav');
+            const phaseNames = ['Votação', 'Refinamentos', 'Mapa', 'Ambição'];
+            nav.innerHTML = PHASES.map((p, i) => 
+                `<button class="phase-btn ${i === currentPhase ? 'active' : ''}" onclick="goToPhase(${i})">
+                    Fase ${i + 1}: ${phaseNames[i]}
+                </button>`
+            ).join('');
+        }
+
+        function goToPhase(phase) {
+            currentPhase = phase;
+            renderAll();
+        }
+
+        function updatePhaseBadge() {
+            const badge = document.getElementById('phaseBadge');
+            const phaseNames = ['Votação de Objetivos', 'Ajuste/Refinamentos', 'Mapa Final', 'Ambição Final'];
+            badge.textContent = 'Fase ' + (currentPhase + 1) + ': ' + phaseNames[currentPhase];
+        }
+
+        function renderAll() {
+            renderPhaseNav();
+            updatePhaseBadge();
+            const content = document.getElementById('content');
+            
+            if (currentPhase === 0) {
+                content.innerHTML = renderVoting();
+            } else if (currentPhase === 1) {
+                content.innerHTML = renderRefine();
+            } else if (currentPhase === 2) {
+                content.innerHTML = renderMap();
+            } else {
+                content.innerHTML = renderAmbition();
+            }
+        }
+
+        function renderVoting() {
+            let html = `<div class="section">
+                <h2>Fase 1: Votação de Objetivos Estratégicos</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 16px;">
+                    Cada diretor insere as sugestões de objetivos para as três dimensões fundamentais.
+                </p>
+                
+                <div class="input-group">
+                    <label>Nome do Diretor/Mediador</label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="directorName" placeholder="ex: João Silva" style="flex: 1;"/>
+                        <button class="button" onclick="addDirector()">+ Adicionar</button>
+                    </div>
+                </div>`;
+
+            if (state.directors.length > 0) {
+                html += `<div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-label">Diretores Cadastrados</div>
+                        <div class="stat-value">${state.directors.length}</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Total de Objetivos</div>
+                        <div class="stat-value">${Object.values(state.objectives).reduce((a, b) => a + b.length, 0)}</div>
+                    </div>
+                </div>
+                <p style="margin: 16px 0; padding: 8px; background: var(--falconi-off-white); border-radius: 4px; font-size: 12px;">
+                    <strong>Diretores:</strong> ${state.directors.join(', ')}
+                </p>`;
+            }
+
+            html += `<div style="margin-top: 20px;">`;
+            
+            DIMENSIONS.forEach(dim => {
+                html += `<div class="dimension-card">
+                    <h3>${dim}</h3>
+                    <div class="input-group">
+                        <input type="text" placeholder="Digite o objetivo estratégico" id="obj-${dim}"/>
+                        <button class="button" onclick="addObjective('${dim}')" style="width: 100%; margin-top: 8px;">
+                            Adicionar Objetivo
+                        </button>
+                    </div>
+                    <div style="margin-top: 12px;">`;
+
+                if (state.objectives[dim] && state.objectives[dim].length > 0) {
+                    state.objectives[dim].forEach((obj, idx) => {
+                        const votes = state.votes[`${dim}-${idx}`] || 0;
+                        html += `<div class="objective-item">
+                            <div style="flex: 1;">
+                                <span style="color: var(--text-secondary); font-size: 12px;">${obj}</span>
+                            </div>
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <span class="votes-badge">${votes} votos</span>
+                                <button class="button secondary" style="padding: 4px 8px; font-size: 11px;" onclick="voteObjective('${dim}',${idx})">
+                                    Votar
+                                </button>
+                            </div>
+                        </div>`;
+                    });
+                } else {
+                    html += '<p style="color: var(--text-secondary); font-size: 12px;">Nenhum objetivo ainda</p>';
+                }
+
+                html += `</div></div>`;
+            });
+
+            html += `</div></div>`;
+            return html;
+        }
+
+        function addDirector() {
+            const input = document.getElementById('directorName');
+            if (input.value.trim()) {
+                state.directors.push(input.value.trim());
+                input.value = '';
+                saveState();
+                showSuccess('Diretor adicionado!');
+                renderAll();
+            }
+        }
+
+        function addObjective(dimension) {
+            const input = document.getElementById(`obj-${dimension}`);
+            if (input.value.trim()) {
+                if (!state.objectives[dimension]) state.objectives[dimension] = [];
+                state.objectives[dimension].push(input.value.trim());
+                input.value = '';
+                saveState();
+                showSuccess('Objetivo adicionado!');
+                renderAll();
+            }
+        }
+
+        function voteObjective(dimension, index) {
+            const key = `${dimension}-${index}`;
+            state.votes[key] = (state.votes[key] || 0) + 1;
+            saveState();
+            showSuccess('Voto registrado!');
+            renderAll();
+        }
+
+        function renderRefine() {
+            let html = `<div class="section">
+                <h2>Fase 2: Ajuste/Refinamentos</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 16px;">
+                    Para os objetivos mais votados, você pode solicitar refinamentos e gerar novas opções.
+                </p>`;
+
+            let hasObjectives = false;
+
+            DIMENSIONS.forEach(dim => {
+                const topIdx = getTopVotedIndex(dim);
+                if (topIdx === -1) return;
+                
+                hasObjectives = true;
+                const topObj = state.objectives[dim][topIdx];
+                
+                html += `<div class="dimension-card">
+                    <h3>Dimensão: ${dim}</h3>
+                    <p style="margin: 8px 0; font-weight: 500;">Objetivo mais votado:</p>
+                    <p style="background: white; padding: 12px; border-radius: 4px; margin: 8px 0; border-left: 3px solid var(--falconi-lime);">
+                        ${topObj}
+                    </p>
+                    <div class="input-group">
+                        <label>Solicitar refinamentos (opcional)</label>
+                        <textarea id="refine-${dim}" placeholder="ex: Aumentar foco em sustentabilidade, adicionar métricas de impacto social..." style="height: 80px; font-size: 13px;"></textarea>
+                        <button class="button" onclick="generateRefinements('${dim}')" style="width: 100%; margin-top: 8px;">
+                            Gerar 5 Opções Refinadas
+                        </button>
+                    </div>`;
+
+                if (state.refinementOptions[dim] && state.refinementOptions[dim].length > 0) {
+                    html += `<div style="margin-top: 16px;">
+                        <p style="font-weight: 500; margin-bottom: 8px;">Opções refinadas geradas:</p>
+                        <div class="refinement-options">`;
+                    
+                    state.refinementOptions[dim].forEach((opt, idx) => {
+                        const isSelected = state.selectedObjectives[dim] === opt;
+                        html += `<div class="refinement-option ${isSelected ? 'selected' : ''}" onclick="selectRefinement('${dim}',${idx})">
+                            ${opt}
+                        </div>`;
+                    });
+                    
+                    html += `</div></div>`;
+                }
+
+                html += `</div>`;
+            });
+
+            if (!hasObjectives) {
+                html += `<div class="empty-state">
+                    Complete a Fase 1 para que os objetivos apareçam aqui.
+                </div>`;
+            }
+
+            html += `</div>`;
+            return html;
+        }
+
+        function getTopVotedIndex(dimension) {
+            if (!state.objectives[dimension] || state.objectives[dimension].length === 0) return -1;
+            
+            let maxVotes = -1;
+            let topIdx = 0;
+            
+            state.objectives[dimension].forEach((obj, idx) => {
+                const votes = state.votes[`${dimension}-${idx}`] || 0;
+                if (votes > maxVotes) {
+                    maxVotes = votes;
+                    topIdx = idx;
+                }
+            });
+            
+            return topIdx;
+        }
+
+        async function generateRefinements(dimension) {
+            const refineInput = document.getElementById(`refine-${dimension}`);
+            const refinement = refineInput.value.trim();
+            
+            if (!refinement) {
+                alert('Digite os refinamentos desejados');
+                return;
+            }
+
+            const topObj = state.objectives[dimension][getTopVotedIndex(dimension)];
+            const button = event.target;
+            button.disabled = true;
+            button.textContent = 'Gerando...';
+
+            try {
+                const response = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        model: 'claude-sonnet-4-6',
+                        max_tokens: 1000,
+                        messages: [{
+                            role: 'user',
+                            content: `Você é um consultor estratégico da Falconi. Gere 5 variações refinadas do seguinte objetivo estratégico, incorporando os refinamentos solicitados.
+
+Objetivo original: "${topObj}"
+
+Refinamentos desejados: "${refinement}"
+
+Retorne APENAS um JSON com um array chamado "options" contendo exatamente 5 strings. Sem markdown, sem explicações, sem backticks.`
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.content && data.content[0] && data.content[0].text) {
+                    const jsonText = data.content[0].text.replace(/```json|```/g, '').trim();
+                    const parsed = JSON.parse(jsonText);
+                    state.refinementOptions[dimension] = parsed.options;
+                    saveState();
+                    showSuccess('Opções refinadas geradas!');
+                    renderAll();
+                }
+            } catch (e) {
+                alert('Erro ao gerar refinamentos: ' + e.message);
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Gerar 5 Opções Refinadas';
+            }
+        }
+
+        function selectRefinement(dimension, index) {
+            state.selectedObjectives[dimension] = state.refinementOptions[dimension][index];
+            saveState();
+            showSuccess('Objetivo refinado selecionado!');
+            renderAll();
+        }
+
+        function renderMap() {
+            let html = `<div class="section">
+                <h2>Fase 3: Mapa de Objetivos Estratégicos</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 20px;">
+                    Objetivos eleitos após refinamento.
+                </p>`;
+
+            let hasSelections = false;
+            let objectivesHTML = '';
+
+            DIMENSIONS.forEach(dim => {
+                const selected = state.selectedObjectives[dim];
+                const topIdx = getTopVotedIndex(dim);
+                const topObj = topIdx !== -1 ? state.objectives[dim][topIdx] : null;
+                const objective = selected || topObj;
+                hasSelections = hasSelections || !!objective;
+
+                objectivesHTML += `<div class="map-card ${objective ? 'winner' : ''}">
+                    <h3>${dim}</h3>
+                    <div class="map-value">${objective || 'Pendente de definição'}</div>
+                </div>`;
+            });
+
+            html += `<div class="final-map">
+                <h2 style="margin-top: 0;">Objetivos Estratégicos Eleitos</h2>
+                <div class="objectives-grid">
+                    ${objectivesHTML}
+                </div>
+            </div>`;
+
+            if (!hasSelections) {
+                html += `<div class="empty-state">
+                    Complete as fases anteriores para visualizar o mapa final
+                </div>`;
+            } else {
+                html += `<div style="margin-top: 20px; display: flex; gap: 8px;">
+                    <button class="button" onclick="goToPhase(3)">Próximo: Ambição Final →</button>
+                    <button class="button secondary" onclick="exportResults()">Exportar Resultados</button>
+                </div>`;
+            }
+
+            html += `</div>`;
+            return html;
+        }
+
+        function renderAmbition() {
+            let html = `<div class="section">
+                <h2>Fase 4: Ambição Final</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 16px;">
+                    Cada diretor escreve uma ambição final para a Órigo, que será votada e incorporada ao mapa.
+                </p>
+
+                <div class="input-group">
+                    <label>Nome do Diretor</label>
+                    <input type="text" id="amb-director" placeholder="ex: João Silva" style="width: 100%;"/>
+                </div>
+
+                <div class="input-group">
+                    <label>Ambição Final para Órigo</label>
+                    <textarea id="amb-text" placeholder="Digite a visão/ambição final para a empresa..." style="height: 100px; font-size: 13px;"></textarea>
+                    <button class="button" onclick="submitAmbition()" style="width: 100%; margin-top: 8px;">
+                        Registrar Ambição
+                    </button>
+                </div>`;
+
+            if (state.ambitions && state.ambitions.length > 0) {
+                html += `<div style="margin-top: 24px;">
+                    <h3>Ambições Registradas (${state.ambitions.length})</h3>`;
+                
+                state.ambitions.forEach((amb, idx) => {
+                    const votes = amb.votes || 0;
+                    html += `<div class="ambition-card">
+                        <h3>${amb.director}</h3>
+                        <p class="ambition-text">${amb.text}</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px;">
+                            <span class="votes-badge">${votes} votos</span>
+                            <button class="button secondary" style="padding: 6px 12px; font-size: 12px;" onclick="voteAmbition(${idx})">
+                                Votar
+                            </button>
+                        </div>
+                    </div>`;
+                });
+
+                html += `</div>`;
+            }
+
+            html += `<div style="margin-top: 24px; display: flex; gap: 8px;">
+                <button class="button" onclick="renderFinalSummary()">Ver Resumo Final</button>
+                <button class="button secondary" onclick="exportResults()">Exportar Tudo</button>
+            </div>
+
+            </div>`;
+            return html;
+        }
+
+        function submitAmbition() {
+            const director = document.getElementById('amb-director').value.trim();
+            const text = document.getElementById('amb-text').value.trim();
+            
+            if (!director || !text) {
+                alert('Preencha todos os campos');
+                return;
+            }
+
+            state.ambitions.push({ director, text, votes: 0 });
+            document.getElementById('amb-director').value = '';
+            document.getElementById('amb-text').value = '';
+            saveState();
+            showSuccess('Ambição registrada!');
+            renderAll();
+        }
+
+        function voteAmbition(index) {
+            if (!state.ambitions[index].votes) state.ambitions[index].votes = 0;
+            state.ambitions[index].votes++;
+            saveState();
+            showSuccess('Voto registrado!');
+            renderAll();
+        }
+
+        function renderFinalSummary() {
+            const topAmbition = state.ambitions.reduce((a, b) => (b.votes || 0) > (a.votes || 0) ? b : a, state.ambitions[0] || {});
+            
+            let objectivesHTML = '';
+            DIMENSIONS.forEach(dim => {
+                const selected = state.selectedObjectives[dim];
+                const topIdx = getTopVotedIndex(dim);
+                const topObj = topIdx !== -1 ? state.objectives[dim][topIdx] : null;
+                const objective = selected || topObj;
+                
+                objectivesHTML += `<div class="map-card winner">
+                    <h3>${dim}</h3>
+                    <div class="map-value">${objective || 'N/A'}</div>
+                </div>`;
+            });
+
+            let html = `<div class="section" style="margin-top: 20px;">
+                <h2>Resumo Final do Workshop</h2>
+                <div class="final-map">
+                    <h2 style="margin-top: 0;">Ambição Final Eleita</h2>
+                    <div class="ambition-section" style="margin: 20px 0;">
+                        <h3 style="margin-top: 0;">${topAmbition.director || 'Sem ambição'}</h3>
+                        <p class="ambition-text" style="font-size: 16px;">${topAmbition.text || 'Nenhuma ambição registrada'}</p>
+                        <p style="margin-top: 12px; color: var(--text-secondary); font-size: 12px;">
+                            ${topAmbition.votes || 0} votos
+                        </p>
+                    </div>
+
+                    <h2 style="margin: 24px 0;">Objetivos Estratégicos</h2>
+                    <div class="objectives-grid">
+                        ${objectivesHTML}
+                    </div>
+
+                    <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border-light);">
+                        <p style="color: var(--text-secondary); font-size: 12px;">
+                            <strong>Workshop criado:</strong> ${state.createdAt}
+                        </p>
+                        <p style="color: var(--text-secondary); font-size: 12px;">
+                            <strong>Total de Diretores:</strong> ${state.directors.length}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="export-buttons">
+                    <button class="button" onclick="downloadJSON()">Baixar JSON</button>
+                    <button class="button secondary" onclick="downloadCSV()">Baixar CSV</button>
+                    <button class="button secondary" onclick="printSummary()">Imprimir</button>
+                </div>
+            </div>`;
+
+            document.getElementById('content').innerHTML = html;
+        }
+
+        function exportResults() {
+            downloadJSON();
+        }
+
+        function downloadJSON() {
+            const dataStr = JSON.stringify(state, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `origo_workshop_${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function downloadCSV() {
+            let csv = 'Dimensão,Objetivo,Votos\n';
+            
+            DIMENSIONS.forEach(dim => {
+                if (state.objectives[dim]) {
+                    state.objectives[dim].forEach((obj, idx) => {
+                        const votes = state.votes[`${dim}-${idx}`] || 0;
+                        const cleanObj = `"${obj.replace(/"/g, '""')}"`;
+                        csv += `${dim},${cleanObj},${votes}\n`;
+                    });
+                }
+            });
+
+            csv += '\n\nAmbições\n';
+            csv += 'Diretor,Ambição,Votos\n';
+            
+            state.ambitions.forEach(amb => {
+                const cleanText = `"${amb.text.replace(/"/g, '""')}"`;
+                csv += `${amb.director},${cleanText},${amb.votes || 0}\n`;
+            });
+
+            const csvBlob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(csvBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `origo_workshop_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function printSummary() {
+            window.print();
+        }
+
+        // Event Listeners
+        document.getElementById('adminToggle').addEventListener('click', toggleAdminPanel);
+
+        // Initialize
+        loadState();
+        renderAll();
+    </script>
+</body>
+</html>
