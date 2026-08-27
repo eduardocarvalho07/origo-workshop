@@ -8,10 +8,9 @@
         :root {
             --origo-verde: #32BCB8;
             --origo-rosa: #FFA3FC;
-            --origo-roxo: #A4328C;
             --falconi-olive: var(--origo-verde);
             --falconi-lime: var(--origo-rosa);
-            --falconi-off-white: #F8F9FA;
+            --falconi-off-white: #FFFFFF;
             --text-primary: #1a1a1a;
             --text-secondary: #666;
             --border-light: #ddd;
@@ -104,8 +103,8 @@
         }
 
         .phase-badge {
-            background: var(--origo-rosa);
-            color: var(--origo-roxo);
+            background: var(--origo-verde);
+            color: white;
             padding: 8px 16px;
             border-radius: 6px;
             font-weight: 500;
@@ -205,7 +204,7 @@
         }
 
         .button:hover {
-            background: #6a6319;
+            background: #1a9a92;
             transform: translateY(-1px);
         }
 
@@ -1048,26 +1047,23 @@
             }
             
             // Event delegation para votos (funciona com rendering dinâmico)
-            setTimeout(() => {
-                const contentDiv = document.getElementById('content');
-                
-                // Listener para votos de objetivos
-                contentDiv.addEventListener('click', (e) => {
-                    if (e.target.classList.contains('vote-btn-objective')) {
-                        const dimension = e.target.getAttribute('data-dimension');
-                        const index = parseInt(e.target.getAttribute('data-index'));
-                        voteObjective(dimension, index);
-                    }
-                });
-                
-                // Listener para votos de ambições
-                contentDiv.addEventListener('click', (e) => {
-                    if (e.target.classList.contains('vote-btn-ambition')) {
-                        const index = parseInt(e.target.getAttribute('data-index'));
-                        voteAmbition(index);
-                    }
-                });
-            }, 0);
+            // Clona o elemento para remover listeners antigos
+            const newContent = content.cloneNode(true);
+            content.parentNode.replaceChild(newContent, content);
+            const contentDiv = document.getElementById('content');
+            
+            // Listener unificado para votos
+            contentDiv.addEventListener('click', function(e) {
+                if (e.target.classList.contains('vote-btn-objective')) {
+                    const dimension = e.target.getAttribute('data-dimension');
+                    const index = parseInt(e.target.getAttribute('data-index'));
+                    voteObjective(dimension, index);
+                }
+                if (e.target.classList.contains('vote-btn-ambition')) {
+                    const index = parseInt(e.target.getAttribute('data-index'));
+                    voteAmbition(index);
+                }
+            });
         }
 
         function renderVoting() {
