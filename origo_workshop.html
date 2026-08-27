@@ -7,9 +7,8 @@
     <style>
         :root {
             --origo-verde: #32BCB8;
-            --origo-rosa: #FFA3FC;
             --falconi-olive: var(--origo-verde);
-            --falconi-lime: var(--origo-rosa);
+            --falconi-lime: var(--origo-verde);
             --falconi-off-white: #FFFFFF;
             --text-primary: #1a1a1a;
             --text-secondary: #666;
@@ -259,8 +258,8 @@
         }
 
         .votes-badge {
-            background: var(--falconi-lime);
-            color: var(--falconi-olive);
+            background: var(--origo-verde);
+            color: white;
             padding: 4px 10px;
             border-radius: 12px;
             font-weight: 500;
@@ -764,7 +763,6 @@
                 'Clientes': [],
                 'Expansão/Novos Negócios': []
             },
-            votes: {},
             selectedObjectives: {},
             refinements: {},
             refinementOptions: {},
@@ -830,11 +828,13 @@
                     }
                 }
 
-                // Carregar objetivos
+                // Carregar objetivos - guarda o rowNum REAL da planilha
+                // (crucial: objetivos de dimensões diferentes ficam intercalados
+                // nas linhas da planilha, então não podemos calcular a linha
+                // pelo índice local dentro de cada dimensão)
                 DIMENSIONS.forEach(dim => {
                     state.objectives[dim] = [];
                 });
-                state.votes = {};
                 
                 for (let i = 1; i < objectivesData.length; i++) {
                     const row = objectivesData[i];
@@ -842,13 +842,10 @@
                         const dim = String(row[1]).trim();
                         const text = String(row[2]).trim();
                         const votes = parseInt(row[4]) || 0;
+                        const rowNum = i + 1; // linha real na planilha (1-indexed, header = linha 1)
                         
                         if (state.objectives[dim]) {
-                            state.objectives[dim].push(text);
-                            const key = `${dim}-${state.objectives[dim].length - 1}`;
-                            if (votes > 0) {
-                                state.votes[key] = votes;
-                            }
+                            state.objectives[dim].push({ text, votes, rowNum });
                         }
                     }
                 }
@@ -922,8 +919,8 @@
                         <h3>${dim}</h3>`;
                     
                     state.objectives[dim].forEach((obj, idx) => {
-                        const votes = state.votes[`${dim}-${idx}`] || 0;
-                        const shortObj = obj.length > 50 ? obj.substring(0, 50) + '...' : obj;
+                        const votes = obj.votes || 0;
+                        const shortObj = obj.text.length > 50 ? obj.text.substring(0, 50) + '...' : obj.text;
                         html += `<div class="admin-item">
                             <div class="admin-item-text">${shortObj} <span style="color: var(--text-secondary);">(${votes} votos)</span></div>
                             <button class="admin-delete-btn" onclick="deleteObjective('${dim}', ${idx})">Deletar</button>
@@ -955,15 +952,6 @@
         function deleteObjective(dimension, index) {
             if (confirm(`Tem certeza que deseja deletar este objetivo de ${dimension}?`)) {
                 state.objectives[dimension].splice(index, 1);
-                
-                const keysToDelete = [];
-                for (const key in state.votes) {
-                    if (key.startsWith(dimension + '-')) {
-                        keysToDelete.push(key);
-                    }
-                }
-                keysToDelete.forEach(key => delete state.votes[key]);
-                
                 showSuccess('Objetivo deletado!');
                 updateAdminPanel();
                 renderAll();
@@ -1112,13 +1100,12 @@
 
                 if (state.objectives[dim] && state.objectives[dim].length > 0) {
                     state.objectives[dim].forEach((obj, idx) => {
-                        const votes = state.votes[`${dim}-${idx}`] || 0;
                         html += `<div class="objective-item">
                             <div style="flex: 1;">
-                                <span style="color: var(--text-secondary); font-size: 12px;">${obj}</span>
+                                <span style="color: var(--text-secondary); font-size: 12px;">${obj.text}</span>
                             </div>
                             <div style="display: flex; gap: 8px; align-items: center;">
-                                <span class="votes-badge">${votes} votos</span>
+                                <span class="votes-badge">${obj.votes || 0} votos</span>
                                 <button class="button secondary vote-btn-objective" style="padding: 4px 8px; font-size: 11px;" data-dimension="${dim}" data-index="${idx}">
                                     Votar
                                 </button>
@@ -1150,9 +1137,6 @@
         async function addObjective(dimension) {
             const input = document.getElementById(`obj-${dimension}`);
             if (input.value.trim()) {
-                if (!state.objectives[dimension]) state.objectives[dimension] = [];
-                state.objectives[dimension].push(input.value.trim());
-                
                 await postToSheets('addObjective', {
                     dimension: dimension,
                     text: input.value.trim(),
@@ -1161,19 +1145,19 @@
                 
                 input.value = '';
                 showSuccess('Objetivo adicionado!');
+                await loadState(); // Recarrega para obter o rowNum real da planilha
                 renderAll();
             }
         }
 
         async function voteObjective(dimension, index) {
-            const key = `${dimension}-${index}`;
-            state.votes[key] = (state.votes[key] || 0) + 1;
+            const obj = state.objectives[dimension] && state.objectives[dimension][index];
+            if (!obj) return;
             
-            const rowNum = index + 2;
+            obj.votes = (obj.votes || 0) + 1;
             
             await postToSheets('vote', {
-                dimension: dimension,
-                rowNum: rowNum
+                rowNum: obj.rowNum
             });
             
             showSuccess('Voto registrado!');
@@ -1195,7 +1179,8 @@
                 if (topIdx === -1) return;
                 
                 hasObjectives = true;
-                const topObj = state.objectives[dim][topIdx];
+                const topObjData = state.objectives[dim][topIdx];
+                const topObj = topObjData.text;
                 
                 html += `<div class="dimension-card">
                     <h3>Dimensão: ${dim}</h3>
@@ -1246,7 +1231,7 @@
             let topIdx = 0;
             
             state.objectives[dimension].forEach((obj, idx) => {
-                const votes = state.votes[`${dimension}-${idx}`] || 0;
+                const votes = obj.votes || 0;
                 if (votes > maxVotes) {
                     maxVotes = votes;
                     topIdx = idx;
@@ -1265,7 +1250,8 @@
                 return;
             }
 
-            const topObj = state.objectives[dimension][getTopVotedIndex(dimension)];
+            const topObjData = state.objectives[dimension][getTopVotedIndex(dimension)];
+            const topObj = topObjData ? topObjData.text : '';
             const button = event.target;
             button.disabled = true;
             button.textContent = 'Gerando...';
@@ -1348,7 +1334,8 @@
             DIMENSIONS.forEach(dim => {
                 const selected = state.selectedObjectives[dim];
                 const topIdx = getTopVotedIndex(dim);
-                const topObj = topIdx !== -1 ? state.objectives[dim][topIdx] : null;
+                const topObjData = topIdx !== -1 ? state.objectives[dim][topIdx] : null;
+                const topObj = topObjData ? topObjData.text : null;
                 const objective = selected || topObj;
                 hasSelections = hasSelections || !!objective;
 
@@ -1470,7 +1457,8 @@
             DIMENSIONS.forEach(dim => {
                 const selected = state.selectedObjectives[dim];
                 const topIdx = getTopVotedIndex(dim);
-                const topObj = topIdx !== -1 ? state.objectives[dim][topIdx] : null;
+                const topObjData = topIdx !== -1 ? state.objectives[dim][topIdx] : null;
+                const topObj = topObjData ? topObjData.text : null;
                 const objective = selected || topObj;
                 
                 objectivesHTML += `<div class="map-card winner">
@@ -1523,7 +1511,8 @@
             DIMENSIONS.forEach(dim => {
                 const selected = state.selectedObjectives[dim];
                 const topIdx = getTopVotedIndex(dim);
-                const topObj = topIdx !== -1 ? state.objectives[dim][topIdx] : null;
+                const topObjData = topIdx !== -1 ? state.objectives[dim][topIdx] : null;
+                const topObj = topObjData ? topObjData.text : null;
                 const objective = selected || topObj;
                 
                 objectivesHTML += `<div class="map-card winner">
@@ -1598,9 +1587,9 @@
             
             DIMENSIONS.forEach(dim => {
                 if (state.objectives[dim]) {
-                    state.objectives[dim].forEach((obj, idx) => {
-                        const votes = state.votes[`${dim}-${idx}`] || 0;
-                        const cleanObj = `"${obj.replace(/"/g, '""')}"`;
+                    state.objectives[dim].forEach((obj) => {
+                        const votes = obj.votes || 0;
+                        const cleanObj = `"${obj.text.replace(/"/g, '""')}"`;
                         csv += `${dim},${cleanObj},${votes}\n`;
                     });
                 }
